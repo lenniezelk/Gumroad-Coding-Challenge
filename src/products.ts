@@ -16,7 +16,7 @@ export const renderProduct = (product: Product): string => {
             ${renderRatings(product)}
         </div>
         <div>
-            <button>Add review</button>
+            <button class="px-2 py-1 border-2 rounded border-gray-300 text-xs text-gray-600 shadow-sm">Add review</button>
         </div>
       </div>
     </div>
