@@ -1,7 +1,8 @@
+import { AddReviewCallback, Product } from "./product.types";
 import { renderRatingStars } from "./star";
 import { removeProductsDialog } from "./toggleAddProductsDialog";
 
-export const renderAddRatingDialog = () => {
+export const renderAddRatingDialog = (callback: AddReviewCallback) => {
   const html = `
 <!-- This example requires Tailwind CSS v2.0+ -->
 <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="product-dialog">
@@ -52,11 +53,11 @@ export const renderAddRatingDialog = () => {
               </p>
             </div>
             <div class="mt-9">
-                <input type="text" placeholder="Start typing....." class="w-full"/>
+                <input type="text" placeholder="Start typing....." class="w-full" id="review-txt" value="" />
             </div>
           </div>
         </div>
-        <button id="cancel" class="px-3 py-1 border-2 rounded border-gray-300 text-sm text-gray-600 shadow-sm mt-9">Submit review</button>
+        <button id="submit-review" class="px-3 py-1 border-2 rounded border-gray-300 text-sm text-gray-600 shadow-sm mt-9">Submit review</button>
       </div>
     </div>
   </div>
@@ -68,6 +69,14 @@ export const renderAddRatingDialog = () => {
   elem
     .querySelector("#product-dialog-overlay")
     .addEventListener("click", removeProductsDialog);
+
+  elem.querySelector("#submit-review").addEventListener("click", () => {
+    const reviewTxt: HTMLInputElement = document.getElementById(
+      "review-txt"
+    ) as HTMLInputElement;
+    callback(reviewTxt.value);
+    removeProductsDialog();
+  });
 
   return elem;
 };

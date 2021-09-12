@@ -1,4 +1,4 @@
-import { Product, Rating } from "./product.types";
+import { AddReviewCallback, Product, Rating } from "./product.types";
 import { sum, round, floor, ceil } from "lodash";
 import { renderRatingStars } from "./star";
 import { renderAddRatingDialog } from "./dialog";
@@ -9,7 +9,10 @@ const getProductRating = (product: Product): number => {
   return round(ratingSum / product.ratings.length, 1);
 };
 
-export const renderProduct = (product: Product): HTMLElement => {
+export const renderProduct = (
+  product: Product,
+  addReviewCallback: AddReviewCallback
+): HTMLElement => {
   const html = `
     <div class="py-4 max-w-sm">
       <h3 class="text-4xl mb-5 font-bold">${product.name}</h3>
@@ -28,7 +31,9 @@ export const renderProduct = (product: Product): HTMLElement => {
 
   const elem = document.createElement("span");
   elem.innerHTML = html;
-  elem.querySelector("button").addEventListener("click", addProductsDialog);
+  elem
+    .querySelector("button")
+    .addEventListener("click", () => addProductsDialog(addReviewCallback));
   return elem;
 };
 

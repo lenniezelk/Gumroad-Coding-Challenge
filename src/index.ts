@@ -1,7 +1,13 @@
 import "tailwindcss/tailwind.css";
 import { join } from "lodash";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 import { Product, Rating } from "./product.types";
 import { renderProduct } from "./products";
 import { Subject } from "rxjs";
@@ -53,9 +59,18 @@ const startApp = async () => {
     productSubject.next(product);
   });
 
+  const addReview = async (path: string, reviewText: string) => {
+    const ratingDocRef = doc(collection(db, path));
+    await setDoc(ratingDocRef, { value: 5, text: reviewText });
+  };
+
   // add products to DOM
   const renderProducts = () => {
-    const productItem = products.map((product) => renderProduct(product));
+    const productItem = products.map((product) => {
+      const addProductReview = (reviewText: string) =>
+        addReview(`products/${product.id}/ratings`, reviewText);
+      return renderProduct(product, addProductReview);
+    });
     const productsNode = document.getElementById("products");
     productsNode.append(...productItem);
   };
