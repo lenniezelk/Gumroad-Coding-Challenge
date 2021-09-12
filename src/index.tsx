@@ -11,6 +11,8 @@ import {
 import { Product, Rating } from "./product.types";
 import { renderProduct } from "./products";
 import { Subject } from "rxjs";
+import * as ReactDOM from "react-dom";
+import { App } from "./app";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDc8RzRYtxlIekQyPBu--0qwKombEXN9W4",
@@ -76,4 +78,6 @@ const startApp = async () => {
   };
 };
 
-startApp();
+// startApp();
+
+ReactDOM.render(<App />, document.getElementById("root"));
