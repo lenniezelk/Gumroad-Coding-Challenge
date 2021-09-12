@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { AddReviewCallback } from "./product.types";
-import { RatingStars } from "./star";
+import ReactStars from "react-stars";
 
 export const AddRatingDialog = ({
   closeDialogCallback,
@@ -10,6 +10,7 @@ export const AddRatingDialog = ({
   closeDialogCallback: VoidFunction;
 }) => {
   const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState(5);
 
   return (
     <div
@@ -48,7 +49,13 @@ export const AddRatingDialog = ({
                   <p className="text-2xl">Rating</p>
                 </div>
                 <div className="mt-9">
-                  <RatingStars rating={4} />
+                  <ReactStars
+                    half
+                    value={rating}
+                    size={50}
+                    color1="#E0E0E0"
+                    onChange={(newValue) => setRating(newValue)}
+                  />
                 </div>
                 <div className="mt-9">
                   <p className="text-2xl">Review</p>
@@ -69,7 +76,7 @@ export const AddRatingDialog = ({
               id="submit-review"
               className="px-3 py-1 border-2 rounded border-gray-300 text-sm text-gray-600 shadow-sm mt-9"
               onClick={() => {
-                addReviewCallback(reviewText);
+                addReviewCallback(reviewText, rating);
                 closeDialogCallback();
               }}
             >

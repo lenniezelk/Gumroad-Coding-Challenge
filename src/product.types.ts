@@ -10,4 +10,4 @@ export type Product = {
   ratings: Rating[];
 };
 
-export type AddReviewCallback = (reviewText: string) => void;
+export type AddReviewCallback = (reviewText: string, rating: number) => void;

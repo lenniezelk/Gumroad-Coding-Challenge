@@ -1,8 +1,8 @@
 import { AddReviewCallback, Product, Rating } from "./product.types";
 import { sum, round } from "lodash";
-import { RatingStars } from "./star";
 import { useState } from "react";
 import { AddRatingDialog } from "./dialog";
+import ReactStars from "react-stars";
 
 const getProductRating = (product: Product): number => {
   const ratingSum = sum(product.ratings.map((rating) => rating.value));
@@ -58,7 +58,7 @@ const OverralRatings = ({ product }: OnlyProductProps) => {
   return (
     <div className="flex items-center">
       <span className="mr-2 text-2xl">{getProductRating(product)}</span>
-      <RatingStars rating={rating} />
+      <ReactStars half value={rating} size={40} color1="#E0E0E0" edit={false} />
     </div>
   );
 };
@@ -82,7 +82,13 @@ const Review = ({ rating }: { rating: Rating }) => {
   return (
     <div className="mb-1 flex items-center">
       <span className="mr-2 text-md">
-        <RatingStars rating={rating.value} />
+        <ReactStars
+          half
+          value={rating.value}
+          size={40}
+          color1="#E0E0E0"
+          edit={false}
+        />
       </span>
       <span className="font-bold text-md">
         {rating.value} {rating.text === "" ? "" : ", "}

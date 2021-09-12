@@ -90,10 +90,14 @@ export const App = () => {
     };
   }, [ids]);
 
-  const addReview = async (path: string, reviewText: string) => {
+  const addReview = async (
+    path: string,
+    reviewText: string,
+    rating: number
+  ) => {
     const ratingDocRef = doc(collection(db.current, path));
     await setDoc(ratingDocRef, {
-      value: 5,
+      value: rating,
       text: reviewText,
       created: serverTimestamp(),
     });
@@ -101,8 +105,8 @@ export const App = () => {
 
   const renderProducts = () => {
     return products.map((product) => {
-      const addProductReview = (reviewText: string) =>
-        addReview(`products/${product.id}/ratings`, reviewText);
+      const addProductReview = (reviewText: string, rating: number) =>
+        addReview(`products/${product.id}/ratings`, reviewText, rating);
       return (
         <RenderProduct
           key={product.id}
