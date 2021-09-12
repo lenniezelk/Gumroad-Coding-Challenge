@@ -9,32 +9,29 @@ const getProductRating = (product: Product): number => {
   return round(ratingSum / product.ratings.length, 1);
 };
 
-export const renderProduct = (
-  product: Product,
-  addReviewCallback: AddReviewCallback
-): HTMLElement => {
-  const html = `
-    <div class="py-4 max-w-sm">
-      <h3 class="text-4xl mb-5 font-bold">${product.name}</h3>
-      <div class="flex justify-between">
+type ProductProps = {
+  product: Product;
+  addReviewCallback: AddReviewCallback;
+};
+
+export const RenderProduct = ({ product, addReviewCallback }: ProductProps) => {
+  return (
+    <div className="py-4 max-w-sm">
+      <h3 className="text-4xl mb-5 font-bold">${product.name}</h3>
+      <div className="flex justify-between">
+        <div>${renderOverralRatings(product)}</div>
         <div>
-            ${renderOverralRatings(product)}
-        </div>
-        <div>
-            <button class="px-2 py-1 border-2 rounded border-gray-300 text-sm text-gray-600 shadow-sm">Add review</button>
+          <button
+            onClick={() => addProductsDialog(addReviewCallback)}
+            className="px-2 py-1 border-2 rounded border-gray-300 text-sm text-gray-600 shadow-sm"
+          >
+            Add review
+          </button>
         </div>
       </div>
-      <hr class="h-1 bg-grey-400 my-5" />
-      ${renderReviews(product)}
+      <hr className="h-1 bg-grey-400 my-5" />${renderReviews(product)}
     </div>
-  `;
-
-  const elem = document.createElement("span");
-  elem.innerHTML = html;
-  elem
-    .querySelector("button")
-    .addEventListener("click", () => addProductsDialog(addReviewCallback));
-  return elem;
+  );
 };
 
 const renderOverralRatings = (product: Product) => {

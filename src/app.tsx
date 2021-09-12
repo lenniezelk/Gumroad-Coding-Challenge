@@ -9,7 +9,7 @@ import {
   Firestore,
 } from "firebase/firestore";
 import { Product, Rating } from "./product.types";
-import { renderProduct } from "./products";
+import { RenderProduct } from "./products";
 import { Subject } from "rxjs";
 import { useEffect, useRef, useState } from "react";
 
@@ -59,20 +59,20 @@ export const App = () => {
     fetchDocs();
   }, []);
 
-  //   const addReview = async (path: string, reviewText: string) => {
-  //     const ratingDocRef = doc(collection(db, path));
-  //     await setDoc(ratingDocRef, { value: 5, text: reviewText });
-  //   };
+  const addReview = async (path: string, reviewText: string) => {
+    const ratingDocRef = doc(collection(db.current, path));
+    await setDoc(ratingDocRef, { value: 5, text: reviewText });
+  };
 
-  // add products to DOM
-  //   const renderProducts = () => {
-  //     const productItem = products.map((product) => {
-  //       const addProductReview = (reviewText: string) =>
-  //         addReview(`products/${product.id}/ratings`, reviewText);
-  //       return renderProduct(product, addProductReview);
-  //     });
-  //     const productsNode = document.getElementById("products");
-  //     productsNode.append(...productItem);
-  //   };
-  return <div>{products.map((product) => product.name)}</div>;
+  const renderProducts = () => {
+    return products.map((product) => {
+      const addProductReview = (reviewText: string) =>
+        addReview(`products/${product.id}/ratings`, reviewText);
+      return (
+        <RenderProduct product={product} addReviewCallback={addProductReview} />
+      );
+    });
+  };
+
+  return <>{renderProducts()}</>;
 };
