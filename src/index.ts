@@ -1,6 +1,7 @@
 import "tailwindcss/tailwind.css";
 import { join } from "lodash";
 import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDc8RzRYtxlIekQyPBu--0qwKombEXN9W4",
@@ -12,14 +13,43 @@ const firebaseConfig = {
   measurementId: "G-LXCP9GCLW8",
 };
 
-function component() {
-  const element = document.createElement("div");
+type Rating = {
+  value: number;
+  text: string;
+  id: string;
+};
 
-  // Lodash, currently included via a script, is required for this line to work
-  element.innerHTML = join(["Hello", "webpack"], " ");
+type Product = {
+  id: string;
+  name: string;
+  ratings: Rating[];
+};
 
-  return element;
-}
+const startApp = async () => {
+  // fetch firebase app and db
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-document.body.appendChild(component());
-initializeApp(firebaseConfig);
+  // fetch products and ratings
+  const productSnapshot = await getDocs(collection(db, "products"));
+  productSnapshot.forEach(async (doc) => {
+    const product: Product = doc.data() as Product;
+    product.id = doc.id;
+
+    const ratingSnapshot = await getDocs(
+      collection(db, `products/${product.id}/ratings`)
+    );
+
+    const ratings: Rating[] = [];
+
+    ratingSnapshot.forEach((doc) => {
+      const rating = doc.data() as Rating;
+      rating.id = doc.id;
+      ratings.push(rating);
+    });
+
+    product.ratings = ratings;
+  });
+};
+
+startApp();
