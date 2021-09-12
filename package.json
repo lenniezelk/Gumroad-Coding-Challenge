@@ -24,6 +24,7 @@
     "webpack-dev-server": "^4.2.0"
   },
   "dependencies": {
+    "firebase": "^9.0.2",
     "lodash": "^4.17.21"
   }
 }
