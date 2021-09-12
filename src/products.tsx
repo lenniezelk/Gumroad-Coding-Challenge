@@ -1,7 +1,8 @@
 import { AddReviewCallback, Product, Rating } from "./product.types";
 import { sum, round } from "lodash";
 import { RatingStars } from "./star";
-import { addProductsDialog } from "./toggleAddProductsDialog";
+import { useState } from "react";
+import { AddRatingDialog } from "./dialog";
 
 const getProductRating = (product: Product): number => {
   const ratingSum = sum(product.ratings.map((rating) => rating.value));
@@ -18,23 +19,35 @@ type OnlyProductProps = {
 };
 
 export const RenderProduct = ({ product, addReviewCallback }: ProductProps) => {
+  const [showAddRatingDialog, setShowAddRatingDialog] = useState(false);
+
+  const toggleDialog = () => setShowAddRatingDialog(!showAddRatingDialog);
+
   return (
-    <div className="py-4 max-w-sm">
-      <h3 className="text-4xl mb-5 font-bold">${product.name}</h3>
-      <div className="flex justify-between">
-        <OverralRatings product={product} />
-        <div>
-          <button
-            onClick={() => addProductsDialog(addReviewCallback)}
-            className="px-2 py-1 border-2 rounded border-gray-300 text-sm text-gray-600 shadow-sm"
-          >
-            Add review
-          </button>
+    <>
+      {showAddRatingDialog && (
+        <AddRatingDialog
+          addReviewCallback={addReviewCallback}
+          closeDialogCallback={toggleDialog}
+        />
+      )}
+      <div className="py-4 max-w-sm">
+        <h3 className="text-4xl mb-5 font-bold">${product.name}</h3>
+        <div className="flex justify-between">
+          <OverralRatings product={product} />
+          <div>
+            <button
+              onClick={toggleDialog}
+              className="px-2 py-1 border-2 rounded border-gray-300 text-sm text-gray-600 shadow-sm"
+            >
+              Add review
+            </button>
+          </div>
         </div>
+        <hr className="h-1 bg-grey-400 my-5" />
+        <Reviews product={product} />
       </div>
-      <hr className="h-1 bg-grey-400 my-5" />
-      <Reviews product={product} />
-    </div>
+    </>
   );
 };
 
