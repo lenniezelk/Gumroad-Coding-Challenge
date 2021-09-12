@@ -13,7 +13,7 @@
 ### To Run v2:
 
 - Clone this repo
-- Checkout branch `v2`
+- Checkout branch `main`
 - Run `yarn install`
 - Run `yarn dev`
 - Once webpack is done compiling it will open the browser at `http:localhost:8080`
