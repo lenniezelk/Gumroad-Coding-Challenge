@@ -1,7 +1,6 @@
 import { AddReviewCallback, Product, Rating } from "./product.types";
-import { sum, round, floor, ceil } from "lodash";
-import { renderRatingStars } from "./star";
-import { renderAddRatingDialog } from "./dialog";
+import { sum, round } from "lodash";
+import { RatingStars } from "./star";
 import { addProductsDialog } from "./toggleAddProductsDialog";
 
 const getProductRating = (product: Product): number => {
@@ -12,6 +11,10 @@ const getProductRating = (product: Product): number => {
 type ProductProps = {
   product: Product;
   addReviewCallback: AddReviewCallback;
+};
+
+type OnlyProductProps = {
+  product: Product;
 };
 
 export const RenderProduct = ({ product, addReviewCallback }: ProductProps) => {
@@ -29,46 +32,48 @@ export const RenderProduct = ({ product, addReviewCallback }: ProductProps) => {
           </button>
         </div>
       </div>
-      <hr className="h-1 bg-grey-400 my-5" />${renderReviews(product)}
+      <hr className="h-1 bg-grey-400 my-5" />
+      <Reviews product={product} />
     </div>
   );
 };
 
-const OverralRatings = ({ product }: { product: Product }) => {
+const OverralRatings = ({ product }: OnlyProductProps) => {
   if (product.ratings.length === 0) return null;
   const rating = getProductRating(product);
 
   return (
     <div className="flex items-center">
       <span className="mr-2 text-2xl">${getProductRating(product)}</span>$
-      {renderRatingStars(rating)}
+      <RatingStars rating={rating} />
     </div>
   );
 };
 
-const renderReviews = (product: Product) => {
-  if (product.ratings.length === 0) return "";
+const Reviews = ({ product }: OnlyProductProps) => {
+  if (product.ratings.length === 0) return null;
 
   const ratings = product.ratings
-    .map((rating) => renderReview(rating))
+    .map((rating) => <Review rating={rating} />)
     .join("");
 
-  return `
-    <h4 class="text-xl font-bold mb-2">Reviews</h4>
-    ${ratings}
-  `;
+  return (
+    <>
+      <h4 className="text-xl font-bold mb-2">Reviews</h4>${ratings}
+    </>
+  );
 };
 
-const renderReview = (rating: Rating) => {
-  return `
-        <div class="mb-1 flex items-center">
-            <span class="mr-2 text-md">
-                ${renderRatingStars(rating.value)}
-            </span>
-            <span class="font-bold text-md">${rating.value} ${
-    rating.text === "" ? "" : ", "
-  }</span>
-            <span class="text-md text-gray-400 ml-1">${rating.text}</span>
-        </div>
-    `;
+const Review = ({ rating }: { rating: Rating }) => {
+  return (
+    <div className="mb-1 flex items-center">
+      <span className="mr-2 text-md">
+        <RatingStars rating={rating.value} />
+      </span>
+      <span className="font-bold text-md">
+        ${rating.value} ${rating.text === "" ? "" : ", "}
+      </span>
+      <span className="text-md text-gray-400 ml-1">${rating.text}</span>
+    </div>
+  );
 };
