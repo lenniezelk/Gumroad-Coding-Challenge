@@ -68,7 +68,10 @@ export const AddRatingDialog = ({
             <button
               id="submit-review"
               className="px-3 py-1 border-2 rounded border-gray-300 text-sm text-gray-600 shadow-sm mt-9"
-              onClick={() => addReviewCallback(reviewText)}
+              onClick={() => {
+                addReviewCallback(reviewText);
+                closeDialogCallback();
+              }}
             >
               Submit review
             </button>

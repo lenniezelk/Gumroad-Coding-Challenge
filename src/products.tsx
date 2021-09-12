@@ -31,7 +31,7 @@ export const RenderProduct = ({ product, addReviewCallback }: ProductProps) => {
           closeDialogCallback={toggleDialog}
         />
       )}
-      <div className="py-4 max-w-sm">
+      <div className="py-4 max-w-md">
         <h3 className="text-4xl mb-5 font-bold">{product.name}</h3>
         <div className="flex justify-between">
           <OverralRatings product={product} />
