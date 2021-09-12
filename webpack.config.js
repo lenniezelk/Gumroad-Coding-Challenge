@@ -1,18 +1,17 @@
 const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: "./src/index.ts",
   output: {
-    filename: "[name].bundle.js",
+    filename: "main.js",
     path: path.resolve(__dirname, "dist"),
     clean: true,
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: "Products",
-    }),
-  ],
+  devServer: {
+    static: "./dist",
+    open: true,
+  },
+  plugins: [],
   devtool: "inline-source-map",
   module: {
     rules: [
@@ -21,5 +20,8 @@ module.exports = {
         use: ["style-loader", "css-loader", "postcss-loader"],
       },
     ],
+  },
+  resolve: {
+    extensions: [".ts", ".js"],
   },
 };

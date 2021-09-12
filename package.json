@@ -9,6 +9,7 @@
     "dev": "webpack serve --mode development --config webpack.config.js"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.172",
     "autoprefixer": "^10.3.4",
     "css-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
@@ -16,6 +17,8 @@
     "postcss-loader": "^6.1.1",
     "style-loader": "^3.2.1",
     "tailwindcss": "^2.2.15",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.4.3",
     "webpack": "^5.52.1",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.2.0"
