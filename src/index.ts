@@ -2,6 +2,9 @@ import "tailwindcss/tailwind.css";
 import { join } from "lodash";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { Product, Rating } from "./product.types";
+import { renderProduct } from "./products";
+import { Subject } from "rxjs";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDc8RzRYtxlIekQyPBu--0qwKombEXN9W4",
@@ -13,22 +16,18 @@ const firebaseConfig = {
   measurementId: "G-LXCP9GCLW8",
 };
 
-type Rating = {
-  value: number;
-  text: string;
-  id: string;
-};
-
-type Product = {
-  id: string;
-  name: string;
-  ratings: Rating[];
-};
-
 const startApp = async () => {
   // fetch firebase app and db
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
+  let products: Product[] = [];
+
+  // use Subject to render products async
+  const productSubject = new Subject<Product>();
+  productSubject.subscribe(() => {
+    renderProducts();
+  });
 
   // fetch products and ratings
   const productSnapshot = await getDocs(collection(db, "products"));
@@ -36,6 +35,7 @@ const startApp = async () => {
     const product: Product = doc.data() as Product;
     product.id = doc.id;
 
+    // fetch product rating
     const ratingSnapshot = await getDocs(
       collection(db, `products/${product.id}/ratings`)
     );
@@ -49,7 +49,18 @@ const startApp = async () => {
     });
 
     product.ratings = ratings;
+    products = [...products, product];
+    productSubject.next(product);
   });
+
+  // add products to DOM
+  const renderProducts = () => {
+    const productsString = products
+      .map((product) => renderProduct(product))
+      .join("");
+    const productsNode = document.getElementById("products");
+    productsNode.innerHTML = productsString;
+  };
 };
 
 startApp();
