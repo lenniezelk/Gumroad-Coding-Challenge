@@ -7,11 +7,16 @@ import {
   doc,
   setDoc,
   Firestore,
+  onSnapshot,
+  serverTimestamp,
+  query,
+  orderBy,
 } from "firebase/firestore";
 import { Product, Rating } from "./product.types";
 import { RenderProduct } from "./products";
-import { Subject } from "rxjs";
 import { useEffect, useRef, useState } from "react";
+import { uniqueId } from "lodash";
+import { Unsubscribe } from "@firebase/util";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDc8RzRYtxlIekQyPBu--0qwKombEXN9W4",
@@ -27,29 +32,48 @@ export const App = () => {
   const app = useRef<FirebaseApp>(null);
   const db = useRef<Firestore>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [ids, setIds] = useState(uniqueId());
+  const unsubscribe = useRef<Unsubscribe>(null);
 
   // fetch products and ratings
   const fetchDocs = async () => {
     const productSnapshot = await getDocs(collection(db.current, "products"));
-    productSnapshot.forEach(async (doc) => {
-      const product: Product = doc.data() as Product;
-      product.id = doc.id;
+    productSnapshot.forEach(async (docSnapshot) => {
+      const product: Product = docSnapshot.data() as Product;
+      product.id = docSnapshot.id;
 
       // fetch product rating
       const ratingSnapshot = await getDocs(
-        collection(db.current, `products/${product.id}/ratings`)
+        query(
+          collection(db.current, `products/${product.id}/ratings`),
+          orderBy("created", "desc")
+        )
       );
 
       const ratings: Rating[] = [];
 
-      ratingSnapshot.forEach((doc) => {
-        const rating = doc.data() as Rating;
-        rating.id = doc.id;
+      ratingSnapshot.forEach((docSnapshot) => {
+        const rating = docSnapshot.data() as Rating;
+        rating.id = docSnapshot.id;
         ratings.push(rating);
       });
 
+      if (unsubscribe.current) unsubscribe.current();
+
+      // watch for changes to ratings
+      unsubscribe.current = onSnapshot(
+        collection(db.current, `products/${product.id}/ratings`),
+        (snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              setIds(uniqueId());
+            }
+          });
+        }
+      );
+
       product.ratings = ratings;
-      setProducts([...products, product]);
+      setProducts([product]);
     });
   };
 
@@ -59,9 +83,20 @@ export const App = () => {
     fetchDocs();
   }, []);
 
+  useEffect(() => {
+    fetchDocs();
+    return () => {
+      if (unsubscribe.current) unsubscribe.current();
+    };
+  }, [ids]);
+
   const addReview = async (path: string, reviewText: string) => {
     const ratingDocRef = doc(collection(db.current, path));
-    await setDoc(ratingDocRef, { value: 5, text: reviewText });
+    await setDoc(ratingDocRef, {
+      value: 5,
+      text: reviewText,
+      created: serverTimestamp(),
+    });
   };
 
   const renderProducts = () => {
