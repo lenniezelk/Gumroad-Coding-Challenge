@@ -32,7 +32,7 @@ export const RenderProduct = ({ product, addReviewCallback }: ProductProps) => {
         />
       )}
       <div className="py-4 max-w-sm">
-        <h3 className="text-4xl mb-5 font-bold">${product.name}</h3>
+        <h3 className="text-4xl mb-5 font-bold">{product.name}</h3>
         <div className="flex justify-between">
           <OverralRatings product={product} />
           <div>
@@ -57,7 +57,7 @@ const OverralRatings = ({ product }: OnlyProductProps) => {
 
   return (
     <div className="flex items-center">
-      <span className="mr-2 text-2xl">${getProductRating(product)}</span>$
+      <span className="mr-2 text-2xl">{getProductRating(product)}</span>
       <RatingStars rating={rating} />
     </div>
   );
@@ -66,13 +66,12 @@ const OverralRatings = ({ product }: OnlyProductProps) => {
 const Reviews = ({ product }: OnlyProductProps) => {
   if (product.ratings.length === 0) return null;
 
-  const ratings = product.ratings
-    .map((rating) => <Review rating={rating} />)
-    .join("");
+  const ratings = product.ratings.map((rating) => <Review rating={rating} />);
 
   return (
     <>
-      <h4 className="text-xl font-bold mb-2">Reviews</h4>${ratings}
+      <h4 className="text-xl font-bold mb-2">Reviews</h4>
+      {ratings}
     </>
   );
 };
@@ -84,9 +83,9 @@ const Review = ({ rating }: { rating: Rating }) => {
         <RatingStars rating={rating.value} />
       </span>
       <span className="font-bold text-md">
-        ${rating.value} ${rating.text === "" ? "" : ", "}
+        {rating.value} {rating.text === "" ? "" : ", "}
       </span>
-      <span className="text-md text-gray-400 ml-1">${rating.text}</span>
+      <span className="text-md text-gray-400 ml-1">{rating.text}</span>
     </div>
   );
 };

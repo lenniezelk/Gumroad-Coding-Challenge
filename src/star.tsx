@@ -30,17 +30,15 @@ export const RatingStars = ({ rating }: { rating: number }) => {
   const empty = ceil(5 - rating);
   const fullStars = Array(floor(rating))
     .fill(0)
-    .map(() => Rating())
-    .join("");
+    .map(() => Rating());
 
   const emptyStars = Array(empty)
     .fill(0)
-    .map(() => EmptyRating())
-    .join("");
+    .map(() => EmptyRating());
 
   return (
     <div className="flex space-x-1">
-      ${fullStars} ${emptyStars}
+      {fullStars} {emptyStars}
     </div>
   );
 };
