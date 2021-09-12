@@ -55,11 +55,9 @@ const startApp = async () => {
 
   // add products to DOM
   const renderProducts = () => {
-    const productsString = products
-      .map((product) => renderProduct(product))
-      .join("");
+    const productItem = products.map((product) => renderProduct(product));
     const productsNode = document.getElementById("products");
-    productsNode.innerHTML = productsString;
+    productsNode.append(...productItem);
   };
 };
 

@@ -1,14 +1,16 @@
 import { Product, Rating } from "./product.types";
 import { sum, round, floor, ceil } from "lodash";
 import { renderRatingStars } from "./star";
+import { renderAddRatingDialog } from "./dialog";
+import { addProductsDialog } from "./toggleAddProductsDialog";
 
 const getProductRating = (product: Product): number => {
   const ratingSum = sum(product.ratings.map((rating) => rating.value));
   return round(ratingSum / product.ratings.length, 1);
 };
 
-export const renderProduct = (product: Product): string => {
-  return `
+export const renderProduct = (product: Product): HTMLElement => {
+  const html = `
     <div class="py-4 max-w-sm">
       <h3 class="text-4xl mb-5 font-bold">${product.name}</h3>
       <div class="flex justify-between">
@@ -23,6 +25,11 @@ export const renderProduct = (product: Product): string => {
       ${renderReviews(product)}
     </div>
   `;
+
+  const elem = document.createElement("span");
+  elem.innerHTML = html;
+  elem.querySelector("button").addEventListener("click", addProductsDialog);
+  return elem;
 };
 
 const renderOverralRatings = (product: Product) => {
