@@ -19,7 +19,7 @@ export const RenderProduct = ({ product, addReviewCallback }: ProductProps) => {
     <div className="py-4 max-w-sm">
       <h3 className="text-4xl mb-5 font-bold">${product.name}</h3>
       <div className="flex justify-between">
-        <div>${renderOverralRatings(product)}</div>
+        <OverralRatings product={product} />
         <div>
           <button
             onClick={() => addProductsDialog(addReviewCallback)}
@@ -34,16 +34,16 @@ export const RenderProduct = ({ product, addReviewCallback }: ProductProps) => {
   );
 };
 
-const renderOverralRatings = (product: Product) => {
-  if (product.ratings.length === 0) return "";
+const OverralRatings = ({ product }: { product: Product }) => {
+  if (product.ratings.length === 0) return null;
   const rating = getProductRating(product);
 
-  return `
-    <div class="flex items-center">
-        <span class="mr-2 text-2xl">${getProductRating(product)}</span>
-        ${renderRatingStars(rating)}
+  return (
+    <div className="flex items-center">
+      <span className="mr-2 text-2xl">${getProductRating(product)}</span>$
+      {renderRatingStars(rating)}
     </div>
-  `;
+  );
 };
 
 const renderReviews = (product: Product) => {
