@@ -19,6 +19,7 @@ export const renderProduct = (product: Product): string => {
             <button class="px-2 py-1 border-2 rounded border-gray-300 text-xs text-gray-600 shadow-sm">Add review</button>
         </div>
       </div>
+      <hr class="h-1 bg-grey-400 my-5" />
     </div>
   `;
 };
