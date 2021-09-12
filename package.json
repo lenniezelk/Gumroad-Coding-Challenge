@@ -1,0 +1,23 @@
+{
+  "name": "gumroad-coding-challenge",
+  "version": "0.0.1",
+  "description": "Gumroad Fullstack(Frontend) Dev",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "webpack --mode development",
+    "dev": "webpack serve --mode development --config webpack.config.js"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.3.4",
+    "html-webpack-plugin": "^5.3.2",
+    "postcss": "^8.3.6",
+    "tailwindcss": "^2.2.15",
+    "webpack": "^5.52.1",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.2.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
