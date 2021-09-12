@@ -30,11 +30,11 @@ export const RatingStars = ({ rating }: { rating: number }) => {
   const empty = ceil(5 - rating);
   const fullStars = Array(floor(rating))
     .fill(0)
-    .map(() => Rating());
+    .map((item, index) => <Rating key={index} />);
 
   const emptyStars = Array(empty)
     .fill(0)
-    .map(() => EmptyRating());
+    .map((item, index) => <EmptyRating key={index} />);
 
   return (
     <div className="flex space-x-1">

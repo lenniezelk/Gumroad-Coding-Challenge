@@ -66,7 +66,9 @@ const OverralRatings = ({ product }: OnlyProductProps) => {
 const Reviews = ({ product }: OnlyProductProps) => {
   if (product.ratings.length === 0) return null;
 
-  const ratings = product.ratings.map((rating) => <Review rating={rating} />);
+  const ratings = product.ratings.map((rating, index) => (
+    <Review rating={rating} key={index} />
+  ));
 
   return (
     <>

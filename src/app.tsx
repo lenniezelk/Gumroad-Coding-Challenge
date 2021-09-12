@@ -69,10 +69,14 @@ export const App = () => {
       const addProductReview = (reviewText: string) =>
         addReview(`products/${product.id}/ratings`, reviewText);
       return (
-        <RenderProduct product={product} addReviewCallback={addProductReview} />
+        <RenderProduct
+          key={product.id}
+          product={product}
+          addReviewCallback={addProductReview}
+        />
       );
     });
   };
 
-  return <>{renderProducts()}</>;
+  return <div className="md:container mx-auto px-5">{renderProducts()}</div>;
 };
