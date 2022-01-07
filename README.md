@@ -1,7 +1,5 @@
 # Gumroad Coding Challenge v2
 
-[Demo Link](https://gumroad-coding-challenge.web.app/)
-
 ### To Run MVP:
 
 - Clone this repo
